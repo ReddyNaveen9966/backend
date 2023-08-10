@@ -1,32 +1,24 @@
 name: Interactive Workflow
-
-on: [push]
-
-jobs:
-  interactive_job:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Ask for favorite color
-        id: color_input
-        run: |
-          echo "What is your favorite color?"
-          echo "::set-output name=color::$(read -r color && echo $color)"
-
-      - name: Ask Yes/No question
-        id: proceed_input
-        run: |
-          echo "Do you want to proceed? (yes/no)"
-          echo "::set-output name=proceed::$(read -r proceed && echo $proceed)"
-
-      - name: Ask for additional comments
-        id: comments_input
-        run: |
-          echo "Please enter additional comments:"
-          echo "::set-output name=comments::$(read -r comments && echo $comments)"
-
-      - name: Display inputs
-        run: |
-          echo "Favorite color: ${{ steps.color_input.outputs.color }}"
-          echo "Proceed choice: ${{ steps.proceed_input.outputs.proceed }}"
-          echo "Additional comments: ${{ steps.comments_input.outputs.comments }}"
+on:
+  workflow_dispatch:
+    inputs:
+      application_type:
+        description: 'What type of application are you building?'
+        required: true
+		options: [Backend-API, Server]
+      schema_path:
+        description: 'Where is your schema?: (path or url)'
+      pick_plugins:
+        description: 'Pick plugins:'
+		required: true
+		options: [TypeScript (required by other typescript plugins), TypeScript Resolvers (strongly typed resolve functions)']
+	  output_path:
+		description: 'Where to write the output:'
+	  Introspection-file:
+	    description: 'Do you want to generate an introspection file?'
+		required: true
+		options: [Yes, No]
+	  Configfile_name:
+	    description: 'How to name the config file?'
+	  script_run:
+	    description: 'What script in package.json should run the codegen?'
